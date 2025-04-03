@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import "./tailwindcss/output.css"
+import Todolist from './Halaman/Todolist/Todolist'
+import Login from './Halaman/Authorization/Login/Login'
+import Register from './Halaman/Authorization/Register/Register'
+import TambahGambar from './Halaman/TambahGambar/TambahGambar'
+import Button from './Halaman/Todolist/Button'
+import {BrowserRouter as Router, Routes, Route, useLocation} from 'react-router-dom'
+import Navbar from './Halaman/Navbar'
+import Beranda from './Halaman/Beranda/Beranda'
+import ProtectedRoute from './Halaman/Authorization/ProtectedRoute'
 
-function App() {
+
+const Layout = () => {
+  const location = useLocation(); 
+  const hideNavbarPaths = ["/login","/register"];
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {!hideNavbarPaths.includes(location.pathname)&& <Navbar />}
+        <Routes>
+          <Route path='/' element={<ProtectedRoute> <Beranda/> </ProtectedRoute>}/>
+          <Route path='/todolist' element={<ProtectedRoute> <Todolist/> </ProtectedRoute> } />
+          <Route path='/gambar' element={<ProtectedRoute><TambahGambar /> </ProtectedRoute> }/>
+          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<Login />} />
+        </Routes>
     </div>
-  );
+  )
+
 }
 
-export default App;
+
+const App = () => {
+  return(
+    <Router>
+      <Layout/>
+    </Router>
+  )
+}
+
+export default App
