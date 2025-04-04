@@ -13,7 +13,7 @@ const Login = () => {
     const login = async() => {
       try{
         //1. Kirim permintaan post untuk login
-        const res = await axios.post("http://localhost:3001/user/login",{email,password});
+        const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/user/login`,{email,password});
         const token = res.data.token 
   
         // 2.Simpan token di localstorage
@@ -27,7 +27,7 @@ const Login = () => {
         }
         
         // 4. Kirim permintaan get
-        const response = await axios.get("http://localhost:3001/todo/todo", config)
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/todo/todo`, config)
         // axios.defaults.headers.common["nama-token"] = `Bearer ${token}`; 
 
         // Navigasi ke halaman selanjutnya

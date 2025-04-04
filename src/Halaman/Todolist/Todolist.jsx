@@ -26,7 +26,7 @@ const Todolist = () => {
                 }
             }
             
-            axios.get("http://localhost:3001/todo/todo",config)
+            axios.get(`${process.env.REACT_APP_BASE_URL}/todo/todo`,config)
             .then(res => {
                 setData(res.data);
                 setLoading(false)
@@ -49,7 +49,7 @@ const Todolist = () => {
         }
 
         try{
-           await axios.patch("http://localhost:3001/todo/todo/" + id,update)
+           await axios.patch(`${process.env.REACT_APP_BASE_URL}/todo/todo/` + id,update)
             .then(res => {
                 getData();
             })
@@ -79,7 +79,7 @@ const Todolist = () => {
         const datas = {
             isi : inputValue
         }
-        axios.post("http://localhost:3001/todo/todo",datas,config)
+        axios.post(`${process.env.REACT_APP_BASE_URL}/todo/todo`,datas,config)
         .then(res => {
             setInputValue("");
             getData();
@@ -103,7 +103,7 @@ const Todolist = () => {
             }
 
             // console.log("Delete " + id)
-            axios.delete("http://localhost:3001/todo/todo/" + id, config)
+            axios.delete(`${process.env.REACT_APP_BASE_URL}/todo/todo/` + id, config)
             .then(res => {
                 getData();
             })

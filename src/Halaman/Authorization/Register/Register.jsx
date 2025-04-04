@@ -20,7 +20,7 @@ const Register = () => {
         email : email,
         password : password
       }
-      axios.post("http://localhost:3001/user/register",data)
+      axios.post(`${process.env.REACT_APP_BASE_URL}/user/register`,data)
       .then(res => {
         navigasi("/login");
       })
