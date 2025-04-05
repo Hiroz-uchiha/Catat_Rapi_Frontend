@@ -7,7 +7,12 @@ const Register = () => {
   const [username,setUsername] = useState("")
   const [email,setEmail] = useState("")
   const [password,setPassword] = useState("")
+  const [showPassword,setShorPassword] = useState(false)
   const navigasi = useNavigate();
+
+  const togglePassword = () => {
+    setShorPassword(!showPassword)
+  }
 
   const login = () => {
     navigasi("/login");
@@ -35,7 +40,10 @@ const Register = () => {
             <h1 className=' text-3xl text-white'>Register</h1>
             <input type="text" className=' rounded-sm p-1 w-96 outline-none' placeholder='Username' onChange={e => setUsername(e.target.value)} />
             <input type="email" className=' rounded-sm p-1 w-96 outline-none' placeholder='Email' onChange={e => setEmail(e.target.value)} />
-            <input type='password' className=' rounded-sm p-1 w-96 outline-none' placeholder='Password' onChange={e => setPassword(e.target.value)}/>
+            <div className='Flex bg-slate-400'>
+              <input type={showPassword ? "text" : "password"} className=' rounded-sm p-1 w-80 outline-none' placeholder='Password' onChange={e => setPassword(e.target.value)}/>
+              <button className='px-3 text-white' onClick={togglePassword}>Show</button>
+            </div>
             <button className=' bg-green-200 p-2 px-3' onClick={register}>Register</button>
             <div className=' flex'>
                 <p className=' text-white mr-1'>Sudah punya akun?</p>

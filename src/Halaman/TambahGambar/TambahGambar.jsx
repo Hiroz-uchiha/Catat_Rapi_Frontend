@@ -6,41 +6,36 @@ import gambar2 from  "../../Assets/Login1.png"
 import axios from "axios"
 
 const TambahGambar = () => {
-    const gambar = [
-        {
-            id : 1,
-            url : gambar1,
-            judul : "Gambar Pertama",
-            isi : "Ini adalah contoh gambar pertama lorem  ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus. "
-        },
-        {
-            id : 2,
-            url : gambar2,
-            judul : "Gambar Kedua",
-            isi : "Ini adalah contoh gambar kedua lorem  ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus. "
-        },
-        {
-            id : 3,
-            url : gambar2,
-            judul : "Gambar Ketiga",
-            isi : "Ini adalah contoh gambar kedua lorem  ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus. "
-        },
-        {
-            id : 4,
-            url : gambar1,
-            judul : "Gambar Keempat",
-            isi : "Ini adalah contoh gambar kedua lorem  ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus. "
-        },
-    ]
-
+   
     const [images,setImages] = useState([])
     const [file,setFile] = useState(null)
+    const [loading,setLoading] = useState(true)
 
     const getImages = () => {
-        axios.get("http://localhost:3001/images")
-        .then(res => {
-            setImages(res.data)
-        })
+        try{
+            // Ambil Token
+            const token = localStorage.getItem("token-kedua")
+            if(!token) {
+                console.log("Token tidak ditmeukan")
+                setLoading(false)
+                return;
+            }
+            
+            // Set Header
+            const config = {
+                headers : {
+                    "nama-token" : token
+                }
+            }
+
+            axios.get(`${process.env.REACT_APP_BASE_URL}/images`,config)
+            .then(res => {
+                setImages(res.data)
+                setLoading(false)
+            })
+        }catch(err){
+            setLoading(true)
+        }
     }
 
     // Upload
@@ -50,16 +45,24 @@ const TambahGambar = () => {
             return ;
         }
 
+        const token = localStorage.getItem("token-kedua")
+        if(!token){
+            return;
+        }
+
+        const config = {
+            headers : {
+                "Content-Type" : "multipart/form-data",
+                "nama-token" : token
+            }
+        }
+
         const formData = new FormData();
         formData.append("gambar",file)
 
         try{
             // Mengirim file ke server
-            await axios.post("http://localhost:3001/images", formData, {
-                headers : {
-                    "Content-Type" : "multipart/form-data"
-                }
-             })
+            await axios.post(`${process.env.REACT_APP_BASE_URL}/images`, formData, config)
             getImages();
         }catch(err){
             console.error("Error pada gambar : " +err)
@@ -70,6 +73,10 @@ const TambahGambar = () => {
     useEffect(() => {
         getImages()
     },[])
+
+    if(loading) {
+        return <p>Loading...</p>
+    }
 
     return (
         <div>
